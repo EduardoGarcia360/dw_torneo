@@ -7,3 +7,4 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->resource('equipos', ['placeholder' => '(:num)', 'except' => 'show']);
+$routes->resource('jugadores', ['placeholder' => '(:num)', 'except' => 'show']);
