@@ -9,3 +9,4 @@ $routes->get('/', 'Home::index');
 $routes->resource('equipos', ['placeholder' => '(:num)', 'except' => 'show']);
 $routes->resource('jugadores', ['placeholder' => '(:num)', 'except' => 'show']);
 $routes->resource('jornadas', ['placeholder' => '(:num)', 'except' => 'show']);
+$routes->resource('goles', ['placeholder' => '(:num)', 'except' => 'show']);
