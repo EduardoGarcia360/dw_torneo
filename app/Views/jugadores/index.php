@@ -9,6 +9,7 @@
     <thead class="table-dark">
         <tr>
             <th scope="col">ID</th>
+            <th scope="col">Foto</th>
             <th scope="col">Nombres</th>
             <th scope="col">Apellidos</th>
             <th scope="col">Fecha de Nacimiento</th>
@@ -20,6 +21,11 @@
         <?php foreach ($jugadores as $jugador) : ?>
             <tr>
                 <td><?= $jugador['id']; ?></td>
+                <td>
+                    <?php if (!empty($jugador['fotografia'])): ?>
+                        <img src="<?= base_url('uploads/jugadores/'.$jugador['fotografia']); ?>" alt="Foto del Jugador" class="img-thumbnail rounded-circle" width="50" height="50">
+                    <?php endif; ?>
+                </td>
                 <td><?= $jugador['nombres']; ?></td>
                 <td><?= $jugador['apellidos']; ?></td>
                 <td><?= $jugador['fecha_nacimiento']; ?></td>

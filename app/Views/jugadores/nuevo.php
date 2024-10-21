@@ -9,7 +9,7 @@
     </div>
 <?php } ?>
 
-<form action="<?= base_url('jugadores'); ?>" method="post">
+<form action="<?= base_url('jugadores'); ?>" method="post" enctype="multipart/form-data">
     <div class="form-group mb-3">
         <label for="nombres">Nombres</label>
         <input type="text" class="form-control" id="nombres" name="nombres" value="<?= old('nombres'); ?>" required>
@@ -32,6 +32,10 @@
                 </option>
             <?php endforeach; ?>
         </select>
+    </div>
+    <div class="form-group mb-3">
+        <label for="fotografia">Fotografía</label>
+        <input type="file" class="form-control" id="fotografia" name="fotografia">
     </div>
     
     <button type="submit" class="btn btn-primary">Guardar</button>

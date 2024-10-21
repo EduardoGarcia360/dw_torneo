@@ -9,7 +9,7 @@
     </div>
 <?php } ?>
 
-<form action="<?= base_url('jugadores/'.$jugador['id']); ?>" method="post">
+<form action="<?= base_url('jugadores/'.$jugador['id']); ?>" method="post" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="jugador_id" value="<?= $jugador['id']; ?>">
 
@@ -38,6 +38,16 @@
                 </option>
             <?php endforeach; ?>
         </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="fotografia">Fotografía</label>
+        <?php if (!empty($jugador['fotografia'])): ?>
+            <div class="mb-2">
+                <img src="<?= base_url('uploads/jugadores/'.$jugador['fotografia']); ?>" alt="Fotografía del Jugador" class="img-thumbnail" width="150">
+            </div>
+        <?php endif; ?>
+        <input type="file" class="form-control" id="fotografia" name="fotografia">
     </div>
     
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>

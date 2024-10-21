@@ -55,25 +55,48 @@ class Jugadores extends ResourceController
     public function create()
     {
         $jugadoresModel = new JugadoresModel();
-        
+    
         // Validación de los datos del formulario
         if (!$this->validate([
             'nombres' => 'required',
             'apellidos' => 'required',
             'fecha_nacimiento' => 'required|valid_date',
             'equipo_id' => 'required',
+            'fotografia' => [
+                'uploaded[fotografia]',
+                'mime_in[fotografia,image/jpg,image/jpeg,image/png]',
+                'max_size[fotografia,2048]', // Máximo de 2MB
+            ]
         ])) {
             return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
         }
-
-        // Guardar el nuevo jugador
+    
+        // Procesar la imagen
+        $file = $this->request->getFile('fotografia');
+        $newFileName = '';
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            // Obtener la extensión del archivo
+            $extension = $file->getClientExtension();
+    
+            // Generar el nombre del archivo: 'JUGADOR_'.$fecha.'_'.$hora.'_'.$random.'.extension'
+            $fecha = date('Ymd');
+            $hora = date('His');
+            $random = rand(1, 10000); // Número aleatorio entre 1 y 10,000
+            $newFileName = 'JUGADOR_' . $fecha . '_' . $hora . '_' . $random . '.' . $extension;
+    
+            // Mover el archivo a la carpeta /uploads/jugadores/
+            $file->move(WRITEPATH . '../public/uploads/jugadores', $newFileName);
+        }
+    
+        // Guardar el nuevo jugador con la referencia a la imagen
         $jugadoresModel->save([
             'nombres' => $this->request->getPost('nombres'),
             'apellidos' => $this->request->getPost('apellidos'),
             'fecha_nacimiento' => $this->request->getPost('fecha_nacimiento'),
-            'equipo_id' => $this->request->getPost('equipo_id')
+            'equipo_id' => $this->request->getPost('equipo_id'),
+            'fotografia' => $newFileName, // Guardar el nombre del archivo
         ]);
-
+    
         return redirect()->to('/jugadores')->with('success', 'Jugador creado exitosamente.');
     }
 
@@ -109,25 +132,54 @@ class Jugadores extends ResourceController
     public function update($id = null)
     {
         $jugadoresModel = new JugadoresModel();
-
+        $jugador = $jugadoresModel->find($id); // Obtener los datos actuales del jugador
+    
         // Validación de los datos del formulario
         if (!$this->validate([
             'nombres' => 'required',
             'apellidos' => 'required',
             'fecha_nacimiento' => 'required|valid_date',
             'equipo_id' => 'required',
+            'fotografia' => [
+                'mime_in[fotografia,image/jpg,image/jpeg,image/png]',
+                'max_size[fotografia,2048]', // Máximo de 2MB
+            ]
         ])) {
             return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
         }
-
-        // Actualizar jugador
+    
+        // Procesar la nueva imagen, si se sube
+        $file = $this->request->getFile('fotografia');
+        $newFileName = $jugador['fotografia']; // Mantener la imagen actual por defecto
+    
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            // Obtener la extensión del archivo
+            $extension = $file->getClientExtension();
+    
+            // Generar un nuevo nombre de archivo: 'JUGADOR_'.$fecha.'_'.$hora.'_'.$random.'.extension'
+            $fecha = date('Ymd');
+            $hora = date('His');
+            $random = rand(1, 10000); // Número aleatorio entre 1 y 10,000
+            $newFileName = 'JUGADOR_' . $fecha . '_' . $hora . '_' . $random . '.' . $extension;
+    
+            // Mover el archivo a la carpeta /uploads/jugadores/
+            $file->move(WRITEPATH . '../public/uploads/jugadores', $newFileName);
+    
+            // Eliminar la imagen anterior si existe
+            if (!empty($jugador['fotografia']) && file_exists(WRITEPATH . '../public/uploads/jugadores/' . $jugador['fotografia'])) {
+                unlink(WRITEPATH . '../public/uploads/jugadores/' . $jugador['fotografia']);
+            }
+        }
+    
+        // Actualizar los datos del jugador, incluyendo la nueva imagen si aplica
         $jugadoresModel->update($id, [
             'nombres' => $this->request->getPost('nombres'),
             'apellidos' => $this->request->getPost('apellidos'),
             'fecha_nacimiento' => $this->request->getPost('fecha_nacimiento'),
-            'equipo_id' => $this->request->getPost('equipo_id')
+            'equipo_id' => $this->request->getPost('equipo_id'),
+            'fotografia' => $newFileName, // Guardar el nombre de la nueva imagen (o la actual si no cambia)
         ]);
-
+    
         return redirect()->to('/jugadores')->with('success', 'Jugador actualizado exitosamente.');
     }
 
