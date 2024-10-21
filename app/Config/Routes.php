@@ -6,6 +6,9 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
+$routes->get('/inicio', 'Home::inicio');
+$routes->post('/login', 'Home::login');
+$routes->get('/salir', 'Home::salir');
 $routes->resource('equipos', ['placeholder' => '(:num)', 'except' => 'show']);
 $routes->resource('jugadores', ['placeholder' => '(:num)', 'except' => 'show']);
 $routes->resource('jornadas', ['placeholder' => '(:num)', 'except' => 'show']);

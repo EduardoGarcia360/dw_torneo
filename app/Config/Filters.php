@@ -12,6 +12,7 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use App\Filters\SessionFilter;
 
 class Filters extends BaseFilters
 {
@@ -34,6 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'SessionFilter'   => SessionFilter::class,
     ];
 
     /**
@@ -103,5 +105,23 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        "SessionFilter" => [
+			"before" => [
+				"/inicio",
+                "/equipos",
+                "/equipos/*",
+                "/goles",
+                "/goles/*",
+                "/incidencias",
+                "/incidencias/*",
+                "/jornadas",
+                "/jornadas/*",
+                "/jugadores",
+                "/jugadores/*",
+                "/usuarios",
+                "/usuarios/*",
+			]
+		]
+    ];
 }

@@ -56,7 +56,7 @@ class Usuarios extends ResourceController
         if (!$this->validate([
             'nombre' => 'required|min_length[3]|max_length[45]',
             'apellido' => 'required|min_length[3]|max_length[45]',
-            'correoElectronico' => 'required|valid_email|max_length[75]',
+            'correoElectronico' => 'required|valid_email|max_length[75]|is_unique[usuarios.correoElectronico]',
             'telefono' => 'required|max_length[45]',
             'contrasena' => 'required|min_length[6]|max_length[45]',
         ])) {
@@ -109,7 +109,7 @@ class Usuarios extends ResourceController
         if (!$this->validate([
             'nombre' => 'required|min_length[3]|max_length[45]',
             'apellido' => 'required|min_length[3]|max_length[45]',
-            'correoElectronico' => 'required|valid_email|max_length[75]',
+            'correoElectronico' => "required|valid_email|max_length[75]|is_unique[usuarios.correoElectronico,id,{$id}]",
             'telefono' => 'required|max_length[45]',
             'contrasena' => 'required|min_length[6]|max_length[45]',
         ])) {

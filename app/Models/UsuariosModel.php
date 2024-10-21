@@ -17,4 +17,12 @@ class UsuariosModel extends Model
     // Dates
     protected $useTimestamps = false;
 
+    public function verificarUsuario($correoElectronico, $contrasena)
+    {
+        return $this->select('usuarios.*')
+                    ->where('usuarios.correoElectronico', $correoElectronico)
+                    ->where('usuarios.contrasena', $contrasena)
+                    ->first();
+    }
+
 }
