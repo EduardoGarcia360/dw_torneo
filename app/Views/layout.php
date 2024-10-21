@@ -50,6 +50,7 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="<?= base_url('usuarios'); ?>">Usuarios</a>
                         <a class="collapse-item" href="<?= base_url('equipos'); ?>">Equipos</a>
                         <a class="collapse-item" href="<?= base_url('jugadores'); ?>">Jugadores</a>
                         <a class="collapse-item" href="<?= base_url('jornadas'); ?>">Jornadas</a>
