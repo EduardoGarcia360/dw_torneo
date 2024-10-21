@@ -28,7 +28,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-info sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -133,10 +133,10 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <footer class="sticky-footer bg-gradient-secondary">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Desarrollo Web | Grupo #3</span>
+                        <span class="text-white">Desarrollo Web | Grupo #3</span>
                     </div>
                 </div>
             </footer>
