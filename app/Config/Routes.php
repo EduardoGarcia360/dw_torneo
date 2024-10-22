@@ -19,3 +19,5 @@ $routes->get('reportea', 'Reportea::index');
 $routes->get('reportea/generarReportePdf', 'Reportea::generarReportePdf');
 $routes->get('reporteb', 'Reporteb::index');
 $routes->get('reporteb/generar_pdf', 'Reporteb::generar_pdf');
+$routes->get('reportec', 'Reportec::index');
+$routes->get('reportec/generar_pdf', 'Reportec::generar_pdf');

@@ -90,6 +90,12 @@
                     <span>Reporte B</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('reportec'); ?>">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Reporte C</span></a>
+            </li>
+
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
