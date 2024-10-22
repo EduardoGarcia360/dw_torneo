@@ -21,3 +21,5 @@ $routes->get('reporteb', 'Reporteb::index');
 $routes->get('reporteb/generar_pdf', 'Reporteb::generar_pdf');
 $routes->get('reportec', 'Reportec::index');
 $routes->get('reportec/generar_pdf', 'Reportec::generar_pdf');
+$routes->get('reported', 'Reported::listarJugadores');
+$routes->get('reported/generar_pdf', 'Reported::generar_pdf');
