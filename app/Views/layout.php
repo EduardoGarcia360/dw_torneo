@@ -78,6 +78,14 @@
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('reportea'); ?>">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Reporte A</span></a>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block">
+
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>

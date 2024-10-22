@@ -15,3 +15,5 @@ $routes->resource('jornadas', ['placeholder' => '(:num)', 'except' => 'show']);
 $routes->resource('goles', ['placeholder' => '(:num)', 'except' => 'show']);
 $routes->resource('incidencias', ['placeholder' => '(:num)', 'except' => 'show']);
 $routes->resource('usuarios', ['placeholder' => '(:num)', 'except' => 'show']);
+$routes->get('reportea', 'Reportea::index');
+$routes->get('reportea/generarReportePdf', 'Reportea::generarReportePdf');
