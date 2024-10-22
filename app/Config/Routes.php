@@ -17,3 +17,5 @@ $routes->resource('incidencias', ['placeholder' => '(:num)', 'except' => 'show']
 $routes->resource('usuarios', ['placeholder' => '(:num)', 'except' => 'show']);
 $routes->get('reportea', 'Reportea::index');
 $routes->get('reportea/generarReportePdf', 'Reportea::generarReportePdf');
+$routes->get('reporteb', 'Reporteb::index');
+$routes->get('reporteb/generar_pdf', 'Reporteb::generar_pdf');
