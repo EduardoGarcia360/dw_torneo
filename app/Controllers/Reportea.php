@@ -89,13 +89,13 @@ class Reportea extends ResourceController
 
         // Título del reporte
         $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(0, 10, 'Reporte de Equipos y Jugadores para el Árbitro', 0, 1, 'C');
+        $pdf->Cell(0, 10, iconv('UTF-8', 'ISO-8859-1', 'Reporte de Equipos y Jugadores para el Árbitro'), 0, 1, 'C');
         $pdf->Ln(10); // Salto de línea
 
         // Información de la jornada y equipo
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(0, 10, 'Jornada Actual: ' . $jornadaActual, 0, 1, 'L');
-        $pdf->Cell(0, 10, 'Equipo: ' . $equipo['nombre_equipo'], 0, 1, 'L');
+        $pdf->Cell(0, 10, 'Equipo: ' . iconv('UTF-8', 'ISO-8859-1', $equipo['nombre_equipo']), 0, 1, 'L');
         $pdf->Ln(10); // Salto de línea
 
         // Crear tabla de jugadores
@@ -129,8 +129,8 @@ class Reportea extends ResourceController
             }
 
             // Celdas de texto para los nombres, apellidos, y suspensión
-            $pdf->Cell(40, 30, $jugador['nombres'], 1);
-            $pdf->Cell(40, 30, $jugador['apellidos'], 1);
+            $pdf->Cell(40, 30, iconv('UTF-8', 'ISO-8859-1', $jugador['nombres']), 1);
+            $pdf->Cell(40, 30, iconv('UTF-8', 'ISO-8859-1', $jugador['apellidos']), 1);
             $pdf->Cell(30, 30, ($jugador['suspendido']) ? 'Suspendido' : 'Disponible', 1);
             $pdf->Ln(); // Mover a la siguiente línea después de procesar toda la fila
         }
