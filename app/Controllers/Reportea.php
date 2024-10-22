@@ -77,9 +77,9 @@ class Reportea extends ResourceController
         foreach ($jugadores as &$jugador) {
             // Verificar si el jugador está suspendido en la jornada actual
             $suspension = $incidenciasModel->where('jugador_id', $jugador['id'])
-                                           ->where('fecha_suspension >=', $jornadaActual)
-                                           ->where('tipo_tarjeta', 'R')
-                                           ->first();
+                                        ->where('fecha_suspension >=', $jornadaActual)
+                                        ->where('tipo_tarjeta', 'R')
+                                        ->first();
             $jugador['suspendido'] = !empty($suspension); // True si está suspendido
         }
 
@@ -89,7 +89,7 @@ class Reportea extends ResourceController
 
         // Título del reporte
         $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(0, 10, 'Reporte de Equipos y Jugadores para el Arbitro', 0, 1, 'C');
+        $pdf->Cell(0, 10, 'Reporte de Equipos y Jugadores para el Árbitro', 0, 1, 'C');
         $pdf->Ln(10); // Salto de línea
 
         // Información de la jornada y equipo
@@ -108,14 +108,19 @@ class Reportea extends ResourceController
         $pdf->Ln();
 
         $pdf->SetFont('Arial', '', 12);
-        foreach ($jugadores as $jugador) {
+        foreach ($jugadores as &$jugador) {
+            // Agregar celda para ID
             $pdf->Cell(20, 30, $jugador['id'], 1);
 
             // Mostrar la imagen si existe
+            $x = $pdf->GetX(); // Obtener la posición X actual
+            $y = $pdf->GetY(); // Obtener la posición Y actual
             if (!empty($jugador['fotografia'])) {
                 $rutaImagen = WRITEPATH . '../public/uploads/jugadores/' . $jugador['fotografia'];
                 if (file_exists($rutaImagen)) {
-                    $pdf->Cell(30, 30, $pdf->Image($rutaImagen, $pdf->GetX(), $pdf->GetY(), 20, 20), 1);
+                    // Reservar espacio para la imagen y luego colocarla en la celda
+                    $pdf->Cell(30, 30, '', 1);
+                    $pdf->Image($rutaImagen, $x + 5, $y + 5, 20, 20); // Imagen centrada en la celda
                 } else {
                     $pdf->Cell(30, 30, 'Sin imagen', 1, 0, 'C');
                 }
@@ -123,10 +128,11 @@ class Reportea extends ResourceController
                 $pdf->Cell(30, 30, 'Sin imagen', 1, 0, 'C');
             }
 
+            // Celdas de texto para los nombres, apellidos, y suspensión
             $pdf->Cell(40, 30, $jugador['nombres'], 1);
             $pdf->Cell(40, 30, $jugador['apellidos'], 1);
             $pdf->Cell(30, 30, ($jugador['suspendido']) ? 'Suspendido' : 'Disponible', 1);
-            $pdf->Ln();
+            $pdf->Ln(); // Mover a la siguiente línea después de procesar toda la fila
         }
 
         // Salida del PDF
