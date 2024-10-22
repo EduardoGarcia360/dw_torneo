@@ -9,6 +9,7 @@
     <thead class="table-dark">
         <tr>
             <th scope="col">ID</th>
+            <th scope="col">Foto</th>
             <th scope="col">Jugador</th>
             <th scope="col">Descripción</th>
             <th scope="col">Tipo de Tarjeta</th>
@@ -21,6 +22,11 @@
         <?php foreach ($incidencias as $incidencia) : ?>
             <tr>
                 <td><?= $incidencia['id']; ?></td>
+                <td>
+                    <?php if (!empty($incidencia['fotografia'])): ?>
+                        <img src="<?= base_url('uploads/jugadores/'.$incidencia['fotografia']); ?>" alt="Foto del Jugador" class="img-thumbnail rounded-circle" width="50" height="50">
+                    <?php endif; ?>
+                </td>
                 <td><?= $incidencia['nombres'] . ' ' . $incidencia['apellidos']; ?></td>
                 <td><?= $incidencia['descripcion']; ?></td>
                 <td><?= $incidencia['tipo_tarjeta'] == 'A' ? 'Amarilla' : 'Roja'; ?></td>

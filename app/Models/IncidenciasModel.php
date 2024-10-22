@@ -19,7 +19,7 @@ class IncidenciasModel extends Model
 
     public function incidenciasJugadores ()
     {
-        return $this->select('incidencias.*, jugadores.nombres, jugadores.apellidos')
+        return $this->select('incidencias.*, jugadores.nombres, jugadores.apellidos, jugadores.fotografia')
             ->join('jugadores', 'incidencias.jugador_id = jugadores.id')
             ->findAll();
     }

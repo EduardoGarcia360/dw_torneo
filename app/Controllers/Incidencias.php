@@ -55,18 +55,30 @@ class Incidencias extends ResourceController
     public function create()
     {
         $incidenciasModel = new IncidenciasModel();
-
-        // Validación de los datos del formulario
-        if (!$this->validate([
+    
+        // Obtener el valor de tipo_tarjeta
+        $tipoTarjeta = $this->request->getPost('tipo_tarjeta');
+    
+        // Definir las reglas de validación
+        $rules = [
             'jugador_id' => 'required|integer',
             'descripcion' => 'required|string',
             'tipo_tarjeta' => 'required|in_list[R,A]',
             'fecha_incidencia' => 'required|valid_date',
-            'fecha_suspension' => 'permit_empty|valid_date',
-        ])) {
+        ];
+    
+        // Si la tarjeta es Roja, la fecha de suspensión es obligatoria
+        if ($tipoTarjeta === 'R') {
+            $rules['fecha_suspension'] = 'required|valid_date';
+        } else {
+            $rules['fecha_suspension'] = 'permit_empty|valid_date';
+        }
+    
+        // Validación de los datos del formulario
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
         }
-
+    
         // Guardar la nueva incidencia
         $incidenciasModel->save([
             'jugador_id' => $this->request->getPost('jugador_id'),
@@ -75,7 +87,7 @@ class Incidencias extends ResourceController
             'fecha_incidencia' => $this->request->getPost('fecha_incidencia'),
             'fecha_suspension' => $this->request->getPost('fecha_suspension')
         ]);
-
+    
         return redirect()->to('/incidencias')->with('success', 'Incidencia registrada exitosamente.');
     }
 
@@ -111,27 +123,39 @@ class Incidencias extends ResourceController
     public function update($id = null)
     {
         $incidenciasModel = new IncidenciasModel();
-
-        // Validación de los datos del formulario
-        if (!$this->validate([
+    
+        // Obtener el valor de tipo_tarjeta
+        $tipoTarjeta = $this->request->getPost('tipo_tarjeta');
+    
+        // Definir las reglas de validación
+        $rules = [
             'jugador_id' => 'required|integer',
             'descripcion' => 'required|string',
             'tipo_tarjeta' => 'required|in_list[R,A]',
             'fecha_incidencia' => 'required|valid_date',
-            'fecha_suspension' => 'permit_empty|valid_date',
-        ])) {
+        ];
+    
+        // Si la tarjeta es Roja, la fecha de suspensión es obligatoria
+        if ($tipoTarjeta === 'R') {
+            $rules['fecha_suspension'] = 'required|valid_date';
+        } else {
+            $rules['fecha_suspension'] = 'permit_empty|valid_date';
+        }
+    
+        // Validación de los datos del formulario
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
         }
-
+    
         // Actualizar la incidencia
         $incidenciasModel->update($id, [
             'jugador_id' => $this->request->getPost('jugador_id'),
             'descripcion' => $this->request->getPost('descripcion'),
             'tipo_tarjeta' => $this->request->getPost('tipo_tarjeta'),
             'fecha_incidencia' => $this->request->getPost('fecha_incidencia'),
-            'fecha_suspension' => $this->request->getPost('fecha_suspension')
+            'fecha_suspension' => $this->request->getPost('fecha_suspension'),
         ]);
-
+    
         return redirect()->to('/incidencias')->with('success', 'Incidencia actualizada exitosamente.');
     }
 
