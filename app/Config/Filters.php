@@ -121,6 +121,14 @@ class Filters extends BaseFilters
                 "/jugadores/*",
                 "/usuarios",
                 "/usuarios/*",
+                "/reportea",
+                "/reportea/*",
+                "/reporteb",
+                "/reporteb/*",
+                "/reportec",
+                "/reportec/*",
+                "/reported",
+                "/reported/*",
 			]
 		]
     ];
