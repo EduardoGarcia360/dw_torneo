@@ -2,7 +2,7 @@
 
 <?= $this->section('contenido'); ?>
 <h3 class="my-3">Reporte de Equipos y Jugadores para el Árbitro</h3>
-<p>Jornada Actual: <?= $jornadaActual; ?></p>
+<p>Jornada Actual: <?= $jornadaActual.' ('.$numeroJornada.')'; ?></p>
 
 <!-- Combo para seleccionar el equipo -->
 <form method="get" action="<?= base_url('reportea'); ?>">

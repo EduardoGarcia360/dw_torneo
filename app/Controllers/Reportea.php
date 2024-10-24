@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\EquiposModel;
 use App\Models\IncidenciasModel;
+use App\Models\JornadasModel;
 use App\Models\JugadoresModel;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -17,29 +18,28 @@ class Reportea extends ResourceController
         $jugadoresModel = new JugadoresModel();
         $equiposModel = new EquiposModel();
         $incidenciasModel = new IncidenciasModel();
+        $jornadasModel = new JornadasModel();
 
-        // Obtener la fecha de la jornada actual (esto se ajusta según la lógica de tu torneo)
-        $jornadaActual = date('Y-m-d');
+        $jornada = $jornadasModel->jornadaVigente();
+
+        $jornadaActual = $jornada['fecha_juego'];
+        $numeroJornada = $jornada['numero_jornada'];
         
-        // Obtener todos los equipos para el combo
         $equipos = $equiposModel->findAll();
 
-        // Filtrar por equipo si se ha seleccionado uno
-        $equipoSeleccionado = $this->request->getGet('equipo_id'); // Obtener equipo seleccionado desde el GET
+        $equipoSeleccionado = $this->request->getGet('equipo_id');
         $jugadores = [];
 
         if (!empty($equipoSeleccionado)) {
-            $equipo = $equiposModel->find($equipoSeleccionado); // Obtener el equipo seleccionado
+            $equipo = $equiposModel->find($equipoSeleccionado);
 
-            // Obtener los jugadores del equipo seleccionado
             $jugadores = $jugadoresModel->where('equipo_id', $equipoSeleccionado)->findAll();
             foreach ($jugadores as &$jugador) {
-                // Verificar si el jugador está suspendido en la fecha de la jornada actual
                 $suspension = $incidenciasModel->where('jugador_id', $jugador['id'])
                                                ->where('fecha_suspension >=', $jornadaActual)
                                                ->where('tipo_tarjeta', 'R')
                                                ->first();
-                $jugador['suspendido'] = !empty($suspension); // True si está suspendido
+                $jugador['suspendido'] = !empty($suspension);
             }
         }
 
@@ -48,7 +48,8 @@ class Reportea extends ResourceController
             'equipos' => $equipos,
             'jugadores' => $jugadores,
             'equipoSeleccionado' => $equipoSeleccionado,
-            'jornadaActual' => $jornadaActual
+            'jornadaActual' => $jornadaActual,
+            'numeroJornada' => $numeroJornada
         ]);
     }
 
@@ -60,27 +61,27 @@ class Reportea extends ResourceController
         $jugadoresModel = new JugadoresModel();
         $equiposModel = new EquiposModel();
         $incidenciasModel = new IncidenciasModel();
+        $jornadasModel = new JornadasModel();
 
-        // Obtener la fecha de la jornada actual
-        $jornadaActual = date('Y-m-d');
+        $jornada = $jornadasModel->jornadaVigente();
 
-        // Obtener el equipo seleccionado
+        $jornadaActual = $jornada['fecha_juego'];
+        $numeroJornada = $jornada['numero_jornada'];
+
         $equipoSeleccionado = $this->request->getGet('equipo_id');
         if (empty($equipoSeleccionado)) {
             return redirect()->to('/reportea')->with('error', 'Debe seleccionar un equipo.');
         }
 
-        // Obtener los datos del equipo y jugadores
         $equipo = $equiposModel->find($equipoSeleccionado);
         $jugadores = $jugadoresModel->where('equipo_id', $equipoSeleccionado)->findAll();
 
         foreach ($jugadores as &$jugador) {
-            // Verificar si el jugador está suspendido en la jornada actual
             $suspension = $incidenciasModel->where('jugador_id', $jugador['id'])
                                         ->where('fecha_suspension >=', $jornadaActual)
                                         ->where('tipo_tarjeta', 'R')
                                         ->first();
-            $jugador['suspendido'] = !empty($suspension); // True si está suspendido
+            $jugador['suspendido'] = !empty($suspension);
         }
 
         // Iniciar FPDF
@@ -90,13 +91,12 @@ class Reportea extends ResourceController
         // Título del reporte
         $pdf->SetFont('Arial', 'B', 16);
         $pdf->Cell(0, 10, iconv('UTF-8', 'ISO-8859-1', 'Reporte de Equipos y Jugadores para el Árbitro'), 0, 1, 'C');
-        $pdf->Ln(10); // Salto de línea
+        $pdf->Ln(10);
 
-        // Información de la jornada y equipo
         $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(0, 10, 'Jornada Actual: ' . $jornadaActual, 0, 1, 'L');
+        $pdf->Cell(0, 10, 'Jornada Actual: ' . $jornadaActual.' ('.$numeroJornada.')', 0, 1, 'L');
         $pdf->Cell(0, 10, 'Equipo: ' . iconv('UTF-8', 'ISO-8859-1', $equipo['nombre_equipo']), 0, 1, 'L');
-        $pdf->Ln(10); // Salto de línea
+        $pdf->Ln(10);
 
         // Crear tabla de jugadores
         $pdf->SetFont('Arial', 'B', 12);
@@ -109,18 +109,15 @@ class Reportea extends ResourceController
 
         $pdf->SetFont('Arial', '', 12);
         foreach ($jugadores as &$jugador) {
-            // Agregar celda para ID
             $pdf->Cell(20, 30, $jugador['id'], 1);
 
-            // Mostrar la imagen si existe
-            $x = $pdf->GetX(); // Obtener la posición X actual
-            $y = $pdf->GetY(); // Obtener la posición Y actual
+            $x = $pdf->GetX();
+            $y = $pdf->GetY();
             if (!empty($jugador['fotografia'])) {
                 $rutaImagen = WRITEPATH . '../public/uploads/jugadores/' . $jugador['fotografia'];
                 if (file_exists($rutaImagen)) {
-                    // Reservar espacio para la imagen y luego colocarla en la celda
                     $pdf->Cell(30, 30, '', 1);
-                    $pdf->Image($rutaImagen, $x + 5, $y + 5, 20, 20); // Imagen centrada en la celda
+                    $pdf->Image($rutaImagen, $x + 5, $y + 5, 20, 20);
                 } else {
                     $pdf->Cell(30, 30, 'Sin imagen', 1, 0, 'C');
                 }
@@ -128,11 +125,10 @@ class Reportea extends ResourceController
                 $pdf->Cell(30, 30, 'Sin imagen', 1, 0, 'C');
             }
 
-            // Celdas de texto para los nombres, apellidos, y suspensión
             $pdf->Cell(40, 30, iconv('UTF-8', 'ISO-8859-1', $jugador['nombres']), 1);
             $pdf->Cell(40, 30, iconv('UTF-8', 'ISO-8859-1', $jugador['apellidos']), 1);
             $pdf->Cell(30, 30, ($jugador['suspendido']) ? 'Suspendido' : 'Disponible', 1);
-            $pdf->Ln(); // Mover a la siguiente línea después de procesar toda la fila
+            $pdf->Ln();
         }
 
         // Salida del PDF

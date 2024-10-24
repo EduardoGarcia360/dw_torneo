@@ -39,7 +39,7 @@
 </div>
 
 <script>
-    let jugadores = <?= json_encode($jugadores); ?>; // Toda la información de jugadores, incidencias y goles
+    let jugadores = <?= json_encode($jugadores); ?>;
 
     document.getElementById('jugador_id').addEventListener('change', function() {
         let jugadorId = this.value;
@@ -47,19 +47,14 @@
 
         if (jugadorSeleccionado) {
             console.log('_', jugadorSeleccionado)
-            // Mostrar información del jugador
             document.getElementById('nombre_jugador').textContent = jugadorSeleccionado.nombres + ' ' + jugadorSeleccionado.apellidos;
             document.getElementById('fecha_nacimiento').textContent = jugadorSeleccionado.fecha_nacimiento;
             document.getElementById('nombre_equipo').textContent = jugadorSeleccionado.nombre_equipo;
-
-            // Mostrar fotografía del jugador
             if (jugadorSeleccionado.fotografia) {
                 document.getElementById('foto_jugador').innerHTML = `<img src="<?= base_url('uploads/jugadores/'); ?>/${jugadorSeleccionado.fotografia}" alt="Foto del Jugador" class="img-thumbnail" width="100" height="100">`;
             } else {
                 document.getElementById('foto_jugador').textContent = 'Sin fotografía disponible';
             }
-
-            // Mostrar incidencias
             let listaIncidencias = document.getElementById('lista_incidencias');
             listaIncidencias.innerHTML = '';
             console.log('solo incidencias', jugadorSeleccionado.incidencias)
@@ -70,8 +65,6 @@
                     listaIncidencias.appendChild(li);
                 });
             }
-
-            // Mostrar goles
             let listaGoles = document.getElementById('lista_goles');
             listaGoles.innerHTML = '';
             console.log('solo goles', jugadorSeleccionado.goles)
@@ -86,8 +79,8 @@
         }
     });
 
+    // Asignar el valor del jugador seleccionado al input oculto para el PDF
     document.getElementById('jugador_id').addEventListener('change', function() {
-        // Asignar el valor del jugador seleccionado al input oculto para el PDF
         document.getElementById('jugador_pdf').value = this.value;
     });
 </script>

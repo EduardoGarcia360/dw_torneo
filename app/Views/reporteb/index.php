@@ -70,8 +70,7 @@
 
 <?= $this->section('scriptPage'); ?>
 <script>
-    let incidencias = <?= json_encode($incidencias); ?>; // Obtener todas las incidencias como JSON
-
+    let incidencias = <?= json_encode($incidencias); ?>;
     const equipoSelect = document.getElementById('equipo_id');
     const jugadorSelect = document.getElementById('jugador_id');
     const tablaIncidencias = document.getElementById('tabla-incidencias');
@@ -81,40 +80,30 @@
     // Evento para filtrar cuando se selecciona un equipo
     equipoSelect.addEventListener('change', function() {
         let equipoId = this.value;
-
-        // Limpiar el combo de jugadores
         jugadorSelect.innerHTML = '<option value="">Todos los jugadores con incidencia</option>';
         jugadorSelect.disabled = !equipoId;
-
-        // Filtrar los jugadores del equipo seleccionado
         let jugadoresFiltrados = incidencias.filter(incidencia => !equipoId || incidencia.equipo_id == equipoId);
-        let jugadoresUnicos = [...new Map(jugadoresFiltrados.map(item => [item.jugador_id, item])).values()]; // Obtener jugadores únicos
-
-        // Rellenar el combo de jugadores con los filtrados
+        let jugadoresUnicos = [...new Map(jugadoresFiltrados.map(item => [item.jugador_id, item])).values()];
         jugadoresUnicos.forEach(jugador => {
             let option = document.createElement('option');
             option.value = jugador.jugador_id;
             option.text = `${jugador.jugador_nombre} ${jugador.jugador_apellidos}`;
             jugadorSelect.appendChild(option);
         });
-
-        // Establecer el valor del campo oculto para el PDF
         equipoPdfInput.value = equipoId;
-
-        // Filtrar la tabla por equipo
         filtrarTabla();
     });
 
     // Evento para filtrar cuando se selecciona un jugador
     jugadorSelect.addEventListener('change', function() {
         filtrarTabla();
-        jugadorPdfInput.value = this.value; // Asignar valor del jugador seleccionado
+        jugadorPdfInput.value = this.value;
     });
 
     // Asignar los valores seleccionados a los inputs ocultos antes de enviar el formulario
     formPdf.addEventListener('submit', function() {
-        equipoPdfInput.value = equipoSelect.value; // Asignar valor del equipo seleccionado
-        jugadorPdfInput.value = jugadorSelect.value; // Asignar valor del jugador seleccionado
+        equipoPdfInput.value = equipoSelect.value;
+        jugadorPdfInput.value = jugadorSelect.value;
     });
 
     // Función para filtrar la tabla según el equipo y el jugador seleccionados
@@ -127,8 +116,6 @@
         filas.forEach(fila => {
             let filaEquipoId = fila.getAttribute('data-equipo');
             let filaJugadorId = fila.getAttribute('data-jugador');
-
-            // Mostrar la fila si coincide con el equipo y jugador seleccionados
             if ((!equipoId || filaEquipoId == equipoId) && (!jugadorId || filaJugadorId == jugadorId)) {
                 fila.style.display = '';
             } else {

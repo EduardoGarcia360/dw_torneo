@@ -17,4 +17,14 @@ class JornadasModel extends Model
     // Dates
     protected $useTimestamps = false;
 
+    public function jornadaVigente()
+    {
+        $hoy = date('Y-m-d');
+        
+        return $this->select('jornadas.*')
+            ->where('fecha_juego <=', $hoy)
+            ->orderBy('fecha_juego', 'DESC')
+            ->first();
+    }
+
 }
