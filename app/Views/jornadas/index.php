@@ -21,7 +21,7 @@
                 <td><?= $jornada['numero_jornada']; ?></td>
                 <td><?= $jornada['fecha_juego']; ?></td>
                 <td>
-                    <a href="<?= base_url('jornadas/editar/'.$jornada['id']); ?>" class="btn btn-warning btn-sm me-2">Editar</a>
+                    <a href="<?= base_url('jornadas/'.$jornada['id'].'/edit'); ?>" class="btn btn-warning btn-sm me-2">Editar</a>
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                             data-target="#eliminaModal" 
                             data-url="<?= base_url('jornadas/'.$jornada['id']); ?>"
